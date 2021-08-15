@@ -9,6 +9,7 @@ The web app is a Django application where you can register/login as a user and s
 ## Code audit
 There is a rest framework implemented with [djangorestframework](https://pypi.org/project/djangorestframework/) for the secret text that users are posting. We can peek a look at his views and models inside the secret folder where the source is located. We can see the secret's model inside secret/models.py:
 
+```python
     class  Secret(models.Model):
 		value  =  models.CharField(max_length=255)
 		owner  =  models.OneToOneField(User, on_delete=CASCADE)
@@ -28,9 +29,10 @@ And there is a model serializer for the model Secret inside secret/serializers.p
 			if  Secret.objects.filter(owner=self.context["request"].user):
 				return  super(SecretSerializer, self).update(Secret.objects.get(owner=self.context['request'].user), validated_data)
 			return  super(SecretSerializer, self).create(validated_data)
+```
 From the serializer we can see that the fields owner, last_updated, created and (implicitly) the id are read only, and the value field is write only.
 Inside secret/views.py we can see the views of the web app and what they are doing:
-
+```python
     class  SecretViewSet(viewsets.ModelViewSet):
 		queryset  =  Secret.objects.all()
 		serializer_class  =  SecretSerializer
@@ -50,7 +52,7 @@ Inside secret/views.py we can see the views of the web app and what they are doi
 		if  secret:
 			return  render(request, "home.html", context={"secret": secret[0].value})
 		return  render(request, "home.html")
-
+```
 We can see the home page view which just asks the database if a logged in user has a secret and displays it to him if it does, inside the home page. Apart from this view we can see that is implemented a ViewSet which is basically an easy automated way to query the database and display to the user the results. In our case we can get a json with all read only fields of the Secret serializer for example visiting [http://challange/api/secret?format=json](https://www.django-rest-framework.org/api-guide/format-suffixes/) we get as a result:
 
     [{"id":1,"owner":1,"last_updated":"2021-08-04T21:55:59.750611Z","created":"2021-08-04T21:55:32.221867Z"},{"id":2,"owner":8,"last_updated":"2021-08-13T20:16:05.306976Z","created":"2021-08-13T20:16:05.307065Z"},{"id":3,"owner":12,"last_updated":"2021-08-13T22:17:15.718312Z","created":"2021-08-13T21:41:25.913725Z"},{"id":4,"owner":113,"last_updated":"2021-08-14T16:08:40.385043Z","created":"2021-08-14T16:07:45.011707Z"},{"id":5,"owner":111,"last_updated":"2021-08-14T17:50:00.910477Z","created":"2021-08-14T17:50:00.910544Z"},{"id":6,"owner":126,"last_updated":"2021-08-15T08:23:42.895236Z","created":"2021-08-15T08:04:32.918062Z"},{"id":7,"owner":129,"last_updated":"2021-08-15T08:53:06.531769Z","created":"2021-08-15T08:53:06.531818Z"},{"id":8,"owner":133,"last_updated":"2021-08-15T17:48:13.303999Z","created":"2021-08-15T12:34:30.069458Z"},{"id":9,"owner":134,"last_updated":"2021-08-15T17:17:50.206823Z","created":"2021-08-15T17:17:33.212906Z"}]
