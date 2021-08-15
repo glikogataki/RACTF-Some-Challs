@@ -1,4 +1,4 @@
-## RACTF - Secret Store [ 300 points ] (6 solves)
+## RACTF - Secret Store / Web [ 300 points ] (6 solves)
 **Description**
 
 > How many secrets could a secret store store if a store could store
