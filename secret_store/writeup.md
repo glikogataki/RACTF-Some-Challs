@@ -10,25 +10,26 @@ The web app is a Django application where you can register/login as a user and s
 There is a rest framework implemented with [djangorestframework](https://pypi.org/project/djangorestframework/) for the secret text that users are posting. We can peek a look at his views and models inside the secret folder where the source is located. We can see the secret's model inside secret/models.py:
 
 ```python
-    class  Secret(models.Model):
-		value  =  models.CharField(max_length=255)
-		owner  =  models.OneToOneField(User, on_delete=CASCADE)
-		last_updated  =  models.DateTimeField(auto_now=True)
-		created  =  models.DateTimeField(auto_now_add=True)
+class  Secret(models.Model):
+	value  =  models.CharField(max_length=255)
+	owner  =  models.OneToOneField(User, on_delete=CASCADE)
+	last_updated  =  models.DateTimeField(auto_now=True)
+	created  =  models.DateTimeField(auto_now_add=True)
+```
 And there is a model serializer for the model Secret inside secret/serializers.py:
+```python
+class  SecretSerializer(serializers.ModelSerializer):
+	class  Meta:
+		model  =  Secret
+		fields  = ["id", "value", "owner", "last_updated", "created"]
+		read_only_fields  = ["owner", "last_updated", "created"]
+		extra_kwargs  = {"value": {"write_only": True}}
 
-    class  SecretSerializer(serializers.ModelSerializer):
-		class  Meta:
-			model  =  Secret
-			fields  = ["id", "value", "owner", "last_updated", "created"]
-			read_only_fields  = ["owner", "last_updated", "created"]
-			extra_kwargs  = {"value": {"write_only": True}}
-
-		def  create(self, validated_data):
-			validated_data["owner"] =  self.context["request"].user
-			if  Secret.objects.filter(owner=self.context["request"].user):
-				return  super(SecretSerializer, self).update(Secret.objects.get(owner=self.context['request'].user), validated_data)
-			return  super(SecretSerializer, self).create(validated_data)
+	def  create(self, validated_data):
+		validated_data["owner"] =  self.context["request"].user
+		if  Secret.objects.filter(owner=self.context["request"].user):
+			return  super(SecretSerializer, self).update(Secret.objects.get(owner=self.context['request'].user), validated_data)
+		return  super(SecretSerializer, self).create(validated_data)
 ```
 From the serializer we can see that the fields owner, last_updated, created and (implicitly) the id are read only, and the value field is write only.
 Inside secret/views.py we can see the views of the web app and what they are doing:
