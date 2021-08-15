@@ -34,25 +34,25 @@ class  SecretSerializer(serializers.ModelSerializer):
 From the serializer we can see that the fields owner, last_updated, created and (implicitly) the id are read only, and the value field is write only.
 Inside secret/views.py we can see the views of the web app and what they are doing:
 ```python
-    class  SecretViewSet(viewsets.ModelViewSet):
-		queryset  =  Secret.objects.all()
-		serializer_class  =  SecretSerializer
-		permission_classes  = (IsAuthenticated  &  IsSecretOwnerOrReadOnly,)
-		filter_backends  = [filters.OrderingFilter]
-		ordering_fields  =  "__all__"
+class  SecretViewSet(viewsets.ModelViewSet):
+	queryset  =  Secret.objects.all()
+	serializer_class  =  SecretSerializer
+	permission_classes  = (IsAuthenticated  &  IsSecretOwnerOrReadOnly,)
+	filter_backends  = [filters.OrderingFilter]
+	ordering_fields  =  "__all__"
 
-	class  RegisterFormView(CreateView):
-		template_name  =  "registration/register.html"
-		form_class  =  UserCreationForm
-		model  =  User
-		success_url  =  "/"
+class  RegisterFormView(CreateView):
+	template_name  =  "registration/register.html"
+	form_class  =  UserCreationForm
+	model  =  User
+	success_url  =  "/"
 
-	def  home(request):
-		if  request.user.is_authenticated:
-			secret  =  Secret.objects.filter(owner=request.user)
-		if  secret:
-			return  render(request, "home.html", context={"secret": secret[0].value})
-		return  render(request, "home.html")
+def  home(request):
+	if  request.user.is_authenticated:
+		secret  =  Secret.objects.filter(owner=request.user)
+	if  secret:
+		return  render(request, "home.html", context={"secret": secret[0].value})
+	return  render(request, "home.html")
 ```
 We can see the home page view which just asks the database if a logged in user has a secret and displays it to him if it does, inside the home page. Apart from this view we can see that is implemented a ViewSet which is basically an easy automated way to query the database and display to the user the results. In our case we can get a json with all read only fields of the Secret serializer for example visiting [http://challange/api/secret?format=json](https://www.django-rest-framework.org/api-guide/format-suffixes/) we get as a result:
 
