@@ -193,4 +193,5 @@ You can easily calculate sha256sum of all the byte files with the help of wildca
     ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb  xbi
     d10b36aa74a59bcf4a88185837f658afaf3646eff2bb16c3928d0e9335e945d2  xbj
 You could write a python/bash script to calculate the flag but i tried crackstation instead because it allows you to crack multiple hashes but max 20 so i had to crack them 20 by 20.
-
+![flag_20](first_20_bytes.png)
+![flag_trailing_bytes](trailing_bytes.png)
