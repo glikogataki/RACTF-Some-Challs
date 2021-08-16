@@ -151,9 +151,8 @@ After that i started to looking for the intended solution researching about toyb
     [ bash cal date dirname echo eject false file help lsof mkpasswd pwd sh sha256sum sleep
     split swapoff sync test time toysh true wc whoami yes 
     $ 
-Show now we know exacly what commands we are allowed to run and don't. As the flag suggests we have to read the flag with `split` and `sha256sum` 
-With the split command you can split the contents of a file into different ones, so you could split a big file to smaller ones for example by 1000 lines, so the point is to split the flag file or any file of our choice to one byte files and calculate the sha256sum of them and recover the their contents. Reading the documentation of split command you can split a file with `split -b 1 flag.txt` and it will split the bytes to `xaa, xab, xac, ...` files by default and then you can calculate their sha256sum like this:
-You can easily calculate sha256sum of all the byte files with the help of wildcards:
+So now we know exacly what commands we are allowed to run and which we don't. As the flag suggests we have to read the flag with `split` and `sha256sum` 
+With the split command you can split the contents of a file into different ones, so you could split a big file to smaller ones for example by 1000 lines, so the point is to split the flag file or any file of our choice to one byte files and calculate the sha256sum of them and recover their contents. Reading the documentation of split command you can split a file with `split -b 1 flag.txt` and it will split the flag to `xaa, xab, xac, ...` files by default and then you can calculate their sha256sum like this easily:
 
     $ sha256sum x??
     454349e422f05297191ead13e21d3db520e5abef52055e4964b82fb213f593a1  xaa
