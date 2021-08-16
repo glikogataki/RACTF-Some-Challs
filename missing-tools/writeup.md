@@ -1,4 +1,4 @@
-## RACTF - Missing Tools / Misc [ 250 points ] ( 133 solves )
+## RACTF - Missing Tools / Misc [ 250 points ] ( 164 solves )
 **Description**
 
 > Man, my friend broke his linux install pretty darn bad. He can only use like, 4 commands. Can you take a look and see if you can recover at least some of his data?
